@@ -1,193 +1,94 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Input,
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
-  Stack,
-  Text,
-  DialogActionTrigger,
-} from "@chakra-ui/react";
+import React, { useState, FormEvent } from 'react';
 
+const UIDetector: React.FC = () => {
+  const [originalUrl, setOriginalUrl] = useState('');
+  const [phishingUrl, setPhishingUrl] = useState('');
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-interface Todo {
-  id: string;
-  item: string;
-}
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setResult(null);
+    setLoading(true);
 
-interface UpdateTodoProps {
-  item: string;
-  id: string;
-  fetchTodos: () => void;
-}
+    try {
+      const formData = new FormData();
+      formData.append('original_url', originalUrl);
+      formData.append('phishing_url', phishingUrl);
 
-interface TodoHelperProps {
-  item: string;
-  id: string;
-  fetchTodos: () => void;
-}
+      const response = await fetch('http://localhost:8000/compare', {
+        method: 'POST',
+        body: formData,
+      });
 
-interface DeleteTodoProps {
-  id: string;
-  fetchTodos: () => void;
-}
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Error performing comparison.');
+      }
 
-const TodosContext = createContext({
-  todos: [], fetchTodos: () => {}
-})
-
-function AddTodo() {
-  const [item, setItem] = React.useState("")
-  const {todos, fetchTodos} = React.useContext(TodosContext)
-
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setItem(event.target.value)
-  }
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const newTodo = {
-      "id": todos.length + 1,
-      "item": item
+      const data = await response.json();
+      setResult(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    fetch("http://localhost:8000/todo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTodo)
-    }).then(fetchTodos)
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        pr="4.5rem"
-        type="text"
-        placeholder="Add a todo item"
-        aria-label="Add a todo item"
-        onChange={handleInput}
-      />
-    </form>
-  )
-}
-
-const UpdateTodo = ({ item, id, fetchTodos }: UpdateTodoProps) => {
-  const [todo, setTodo] = useState(item);
-  const updateTodo = async () => {
-    await fetch(`http://localhost:8000/todo/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ item: todo }),
-    });
-    await fetchTodos();
   };
 
   return (
-    <DialogRoot>
-      <DialogTrigger asChild>
-        <Button h="1.5rem" size="sm">
-          Update Todo
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        position="fixed"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        bg="white"
-        p={6}
-        rounded="md"
-        shadow="xl"
-        maxW="md"
-        w="90%"
-        zIndex={1000}
-      >
-        <DialogHeader>
-          <DialogTitle>Update Todo</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <Input
-            pr="4.5rem"
-            type="text"
-            placeholder="Add a todo item"
-            aria-label="Add a todo item"
-            value={todo}
-            onChange={event => setTodo(event.target.value)}
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: '2rem' }}>
+      <h2>UI Detector</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="originalUrl">Original Website URL:</label>
+          <input
+            type="url"
+            id="originalUrl"
+            value={originalUrl}
+            onChange={(e) => setOriginalUrl(e.target.value)}
+            required
+            style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
           />
-        </DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button variant="outline" size="sm">Cancel</Button>
-          </DialogActionTrigger>
-          <Button size="sm" onClick={updateTodo}>Save</Button>
-        </DialogFooter>
-      </DialogContent>
-    </DialogRoot>
-  )
-}
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="phishingUrl">Phishing Website URL:</label>
+          <input
+            type="url"
+            id="phishingUrl"
+            value={phishingUrl}
+            onChange={(e) => setPhishingUrl(e.target.value)}
+            required
+            style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
+          />
+        </div>
+        <button type="submit" style={{ padding: '0.5rem 1rem' }}>
+          {loading ? 'Comparing...' : 'Compare'}
+        </button>
+      </form>
 
-const DeleteTodo = ({ id, fetchTodos }: DeleteTodoProps) => {
-  const deleteTodo = async () => {
-    await fetch(`http://localhost:8000/todo/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: id })
-    })
-    await fetchTodos()
-  }
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
 
-  return (
-    <Button h="1.5rem" size="sm" marginLeft={2} onClick={deleteTodo}>Delete Todo</Button>
-  )
-}
+      {result && (
+        <div style={{ marginTop: '1.5rem' }}>
+          <h3>Comparison Results</h3>
+          <p>
+            <strong>Original URL:</strong> {result.original_url}
+          </p>
+          <p>
+            <strong>Phishing URL:</strong> {result.phishing_url}
+          </p>
+          <p>
+            <strong>Similarity:</strong> {result.similarity_percentage.toFixed(2)}%
+          </p>
+          <p>
+            <strong>Message:</strong> {result.message}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
-function TodoHelper({item, id, fetchTodos}: TodoHelperProps) {
-  return (
-    <Box p={1} shadow="sm">
-      <Flex justify="space-between">
-        <Text mt={4} as="div">
-          {item}
-          <Flex align="end">
-            <UpdateTodo item={item} id={id} fetchTodos={fetchTodos}/>
-            <DeleteTodo id={id} fetchTodos={fetchTodos}/>  {/* new */}
-          </Flex>
-        </Text>
-      </Flex>
-    </Box>
-  )
-}
-
-export default function Todos() {
-  const [todos, setTodos] = useState([])
-  const fetchTodos = async () => {
-    const response = await fetch("http://localhost:8000/todo")
-    const todos = await response.json()
-    setTodos(todos.data)
-  }
-  useEffect(() => {
-    fetchTodos()
-  }, [])
-
-  return (
-    <TodosContext.Provider value={{todos, fetchTodos}}>
-      <Container maxW="container.xl" pt="100px">
-        <AddTodo />
-        <Stack gap={5}>
-            {
-            todos.map((todo) => (
-                <TodoHelper item={todo.item} id={todo.id} fetchTodos={fetchTodos}/>
-            ))
-            }
-        </Stack>
-      </Container>
-    </TodosContext.Provider>
-  )
-}
+export default UIDetector;
