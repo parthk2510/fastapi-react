@@ -10,9 +10,19 @@ import os
 import shutil
 from skimage.metrics import structural_similarity
 from fastapi import FastAPI, HTTPException, Form
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 app = FastAPI()
+
+# Allow CORS for all origins (adjust as needed for your use case)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can specify your frontend URL here
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def preprocess_ui_element(ui_element_path):
@@ -97,7 +107,6 @@ async def compare(
         raise HTTPException(
             status_code=400, detail="Screenshot capture failed. Cannot perform comparison."
         )
-
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
