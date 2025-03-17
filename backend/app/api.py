@@ -97,8 +97,6 @@ async def compare(
         similarity_percentage, message = compare_ui_elements(path1, path2)
         shutil.rmtree(temp_dir)
         return {
-            "original_url": original_url,
-            "phishing_url": phishing_url,
             "similarity_percentage": similarity_percentage,
             "message": message,
         }
