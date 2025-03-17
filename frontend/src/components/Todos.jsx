@@ -1,13 +1,13 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 
-const UIDetector: React.FC = () => {
+const UIDetector = () => {
   const [originalUrl, setOriginalUrl] = useState('');
   const [phishingUrl, setPhishingUrl] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setResult(null);
@@ -30,7 +30,7 @@ const UIDetector: React.FC = () => {
 
       const data = await response.json();
       setResult(data);
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
