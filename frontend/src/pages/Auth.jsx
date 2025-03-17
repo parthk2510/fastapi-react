@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"; // Import Firebase config
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from "firebase/auth";
+import { auth, db } from "../firebaseConfig"; // Import Firestore config
+import { doc, setDoc } from "firebase/firestore"; // Firestore for saving data
 import "./styles/Auth.css";
-import { motion, AnimatePresence } from "framer-motion"; 
+import { motion, AnimatePresence } from "framer-motion";
 import Squares from "../components/Squares";
 import DecryptedText from "../components/DecryptedText";
 import ClickSpark from "../components/ClickSpark";
@@ -10,14 +14,18 @@ import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [organization, setOrganization] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate();  // For redirection after successful login
+  const navigate = useNavigate();
 
   const handleToggle = () => setIsLogin((prev) => !prev);
 
@@ -29,18 +37,29 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        // Firebase Login
         await signInWithEmailAndPassword(auth, email, password);
         setMessage("Login successful!");
-        navigate("/");  // Redirect to the dashboard after login
+        navigate("/"); // Redirect to dashboard
       } else {
-        // Firebase Signup
         if (password !== confirmPassword) {
           setError("Passwords do not match!");
           setLoading(false);
           return;
         }
-        await createUserWithEmailAndPassword(auth, email, password);
+
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Store additional user info in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          name,
+          contact,
+          email,
+          address,
+          organization: organization || "N/A", // Optional field handling
+          createdAt: new Date().toISOString()
+        });
+
         setMessage("Signup successful!");
       }
     } catch (err) {
@@ -84,6 +103,38 @@ const Auth = () => {
             <AnimatePresence mode="wait">
               <motion.div key={isLogin ? "login" : "signup"} {...fadeAnimation} className="inner-container">
                 <form className="forms" onSubmit={handleSubmit}>
+                  {!isLogin && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Contact No."
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Organization (if any)"
+                        value={organization}
+                        onChange={(e) => setOrganization(e.target.value)}
+                      />
+                    </>
+                  )}
+
                   <input
                     type="text"
                     name="email"
