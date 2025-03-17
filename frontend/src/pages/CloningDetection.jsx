@@ -15,7 +15,6 @@ const CloneDetection = () => {
     setResult(null);
 
     try {
-      // Use the new unified endpoint
       const formData = new FormData();
       formData.append('original_url', originalURL);
       formData.append('phishing_url', copyURL);
@@ -27,19 +26,13 @@ const CloneDetection = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        try {
-          const errorJson = JSON.parse(errorText);
-          throw new Error(errorJson.error || `Request failed with status ${response.status}`);
-        } catch (jsonError) {
-          throw new Error(`Request failed with status ${response.status}: ${errorText}`);
-        }
+        const errorJson = JSON.parse(errorText);
+        throw new Error(errorJson.error || `Request failed with status ${response.status}`);
       }
-      
+
       const data = await response.json();
       setResult(data);
-      console.log("Success: ", data);
     } catch (err) {
-      console.error("Error:", err);
       setError(err.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -55,9 +48,7 @@ const CloneDetection = () => {
 
       <form onSubmit={handleSubmit} className="clone-form">
         <div className="input-group">
-          <label htmlFor="original" className="input-label">
-            Original Webpage URL:
-          </label>
+          <label htmlFor="original" className="input-label">Original Webpage URL:</label>
           <input
             type="url"
             id="original"
@@ -69,9 +60,7 @@ const CloneDetection = () => {
         </div>
 
         <div className="input-group">
-          <label htmlFor="copy" className="input-label">
-            Suspected Copy URL:
-          </label>
+          <label htmlFor="copy" className="input-label">Suspected Copy URL:</label>
           <input
             type="url"
             id="copy"
@@ -98,11 +87,13 @@ const CloneDetection = () => {
                 {result.similarity_percentage.toFixed(2)}%
               </span>
             </div>
+
             {result.is_potential_clone && (
               <div className="warning-message">
                 ⚠️ Warning: High similarity detected! This may be a cloned website.
               </div>
             )}
+
             <div className="result-message">
               <p>{result.message}</p>
             </div>

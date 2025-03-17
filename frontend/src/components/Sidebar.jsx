@@ -12,12 +12,12 @@ const Sidebar = ({ isOpen }) => {
             <NavLink to="/cloning-detection" className="nav-item">
                 <FaCopy /> {isOpen && 'Cloning Detection'}
             </NavLink>
-            <NavLink to="/website-reconnaissance" className="nav-item">
-                <FaGlobe /> {isOpen && 'Website Reconnaissance'}
+            <NavLink to="/phishing-analyzer" className="nav-item">
+                <FaGlobe /> {isOpen && 'Phishing Analyzer'}
             </NavLink>
-            {/* <NavLink to="/seo-ranking" className="nav-item">
-                <FaChartLine /> {isOpen && 'SEO Ranking'}
-            </NavLink> */}
+            <NavLink to="/ssl-mismatch-checker" className="nav-item">
+                <FaChartLine /> {isOpen && 'SSL Mismatch Checker'}
+            </NavLink>
             <NavLink to="/report-page" className="nav-item">
                 <FaFileAlt /> {isOpen && 'Report Page'}
             </NavLink>

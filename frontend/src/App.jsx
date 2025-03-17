@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import CloningDetection from './pages/CloningDetection';
-import WebsiteReconnaissance from './pages/WebsiteReconnaissance';
+import PhishingAnalyzer from './pages/PhishingAnalyzer';
 import SEORanking from './pages/SEORanking';
 import ReportPage from './pages/ReportPage';
 import Auth from './pages/Auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebaseConfig';
+import SSLMismatch from './pages/SSLMismatch';
 import './App.css';
 
 const App = () => {
@@ -54,10 +55,10 @@ const App = () => {
                             }
                         />
                         <Route
-                            path="/website-reconnaissance"
+                            path="/phishing-analyzer"
                             element={
                                 <ProtectedRoute user={user}>
-                                    <WebsiteReconnaissance />
+                                    <PhishingAnalyzer />
                                 </ProtectedRoute>
                             }
                         />
@@ -74,6 +75,14 @@ const App = () => {
                             element={
                                 <ProtectedRoute user={user}>
                                     <ReportPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/ssl-mismatch-checker"
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <SSLMismatch />
                                 </ProtectedRoute>
                             }
                         />
