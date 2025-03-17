@@ -1,0 +1,58 @@
+/* Sidebar Base Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #121212;
+    color: #fff;
+    padding: 1rem;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    transition: width 0.3s ease, transform 0.3s ease;
+    overflow-y: auto; /* Enables scrolling within the sidebar */
+}
+
+/* Expanded Sidebar */
+.sidebar.expanded {
+    width: 250px;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+    width: 80px; 
+}
+
+/* Nav Items */
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.nav-item:hover {
+    background: #1f1f1f;
+}
+
+/* Active Link */
+.nav-item.active {
+    background-color: #e50914;  /* Highlight active page */
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar.expanded {
+        width: 200px;
+    }
+}

@@ -1,0 +1,70 @@
+.phishing-websites-container {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+    max-width: 450px;
+    margin: 2rem auto;
+    text-align: left;
+}
+
+.phishing-websites-container h3 {
+    font-size: 1.4rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.website-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.website-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #2a2a2a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 5px solid #4CAF50;
+    transition: background 0.3s ease;
+}
+
+.website-item:hover {
+    background-color: #333333;
+}
+
+.icon {
+    color: #4CAF50;
+    font-size: 1.5rem;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+}
+
+.details strong {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.details span {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
+
+.click-prone-title {
+    margin-top: 1.5rem;
+    color: #FF5252; /* Highlight Click-Prone Section */
+}
+
+.click-prone {
+    border-left: 5px solid #FF5252;
+    background-color: #2a2a2a;
+}

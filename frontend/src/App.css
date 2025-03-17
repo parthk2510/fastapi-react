@@ -1,42 +1,32 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.content {
+    margin-top: 56px; /*Offset for the fixed header */
+    padding: 20px;
+    background-color: #121212;
+    min-height: 100vh;
+    color: #fff;
+    transition: margin-left 0.3s ease;
+}
+.loading-screen {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+    font-size: 1.5rem;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.sidebar.expanded + .content {
+    margin-left: 240px; /* Space for expanded sidebar */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sidebar.collapsed + .content {
+    margin-left: 80px; /* Space for collapsed sidebar */
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+body.auth-page {
+    background: #000; /* Full dark background */
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
 }

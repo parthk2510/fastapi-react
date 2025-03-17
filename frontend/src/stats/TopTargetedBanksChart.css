@@ -1,0 +1,29 @@
+#chart-container {
+    background-color: #121212; 
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+#chart-title {
+    color: #FFA726; 
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.bar {
+    rx: 5px; /* Rounded bar edges */
+}
+
+.label {
+    fill: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.bank-label {
+    fill: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+}
