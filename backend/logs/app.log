@@ -81,3 +81,21 @@
 2025-03-18 03:07:36,077 - INFO - Successfully preprocessed image: C:\Users\iniku\AppData\Local\Temp\tmppce_ie6n\phishing_screenshot.png
 2025-03-18 03:07:36,095 - INFO - Calculated similarity score: 0.9998382397071744
 2025-03-18 03:07:36,095 - INFO - Similarity percentage: 99.98382397071744
+2025-03-18 04:35:34,530 - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-03-18 04:35:34,833 - DEBUG - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2025-03-18 04:35:34,835 - INFO - Successfully fetched content from https://www.google.com/
+2025-03-18 04:35:34,835 - INFO - SSL check: Valid
+2025-03-18 04:35:34,841 - INFO - Content analysis completed for https://www.google.com/
+2025-03-18 04:35:34,841 - INFO - URL structure check completed for https://www.google.com/
+2025-03-18 04:35:34,842 - INFO - Calculated threat score for https://www.google.com/: 5.5
+2025-03-18 04:35:34,842 - INFO - Threat level for https://www.google.com/: Low
+2025-03-18 04:35:34,842 - ERROR - Error analyzing URL https://www.google.com/: 'URLRequest' object has no attribute 'user_email'
+2025-03-18 04:35:35,913 - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-03-18 04:35:36,139 - DEBUG - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2025-03-18 04:35:36,222 - INFO - Successfully fetched content from https://www.google.com/
+2025-03-18 04:35:36,222 - INFO - SSL check: Valid
+2025-03-18 04:35:36,227 - INFO - Content analysis completed for https://www.google.com/
+2025-03-18 04:35:36,229 - INFO - URL structure check completed for https://www.google.com/
+2025-03-18 04:35:36,229 - INFO - Calculated threat score for https://www.google.com/: 5.5
+2025-03-18 04:35:36,229 - INFO - Threat level for https://www.google.com/: Low
+2025-03-18 04:35:36,229 - ERROR - Error analyzing URL https://www.google.com/: 'URLRequest' object has no attribute 'user_email'

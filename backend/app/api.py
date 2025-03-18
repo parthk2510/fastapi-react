@@ -19,6 +19,9 @@ from urllib.parse import urlparse
 import re
 import requests
 import logging
+from typing import List, Optional
+from .utils.report_generator import create_incident_report_pdf
+from .utils.email_sender import send_report_email
 
 app = FastAPI()
 
@@ -272,6 +275,42 @@ async def compare(
         raise HTTPException(
             status_code=400, detail="Screenshot capture failed. Cannot perform comparison."
         )
+
+
+class IncidentReport(BaseModel):
+    name: str
+    organization: Optional[str] = None
+    contact: str
+    email: str
+    address: Optional[str] = None
+    affected_entity: str
+    incident_type: List[str]
+    is_critical: str
+    domain: Optional[str] = None
+    ip_address: Optional[str] = None
+    os: Optional[str] = None
+    location: Optional[str] = None
+    description: str
+    occurrence_date: str
+    detection_date: str
+
+
+@app.post("/api/report")
+async def generate_and_send_report(report: IncidentReport):
+    try:
+        # Generate PDF
+        pdf_buffer = create_incident_report_pdf(report.dict())
+        
+        # Send email
+        email_sent = send_report_email(pdf_buffer)
+        
+        if not email_sent:
+            raise HTTPException(status_code=500, detail="Failed to send email")
+        
+        return {"message": "Report generated and sent successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 if __name__ == "__main__":
     logging.info("Starting FastAPI application")

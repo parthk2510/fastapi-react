@@ -15,9 +15,9 @@ const Sidebar = ({ isOpen }) => {
             <NavLink to="/phishing-analyzer" className="nav-item">
                 <FaGlobe /> {isOpen && 'Phishing Analyzer'}
             </NavLink>
-            <NavLink to="/ssl-mismatch-checker" className="nav-item">
+            {/* <NavLink to="/ssl-mismatch-checker" className="nav-item">
                 <FaChartLine /> {isOpen && 'SSL Mismatch Checker'}
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/report-page" className="nav-item">
                 <FaFileAlt /> {isOpen && 'Report Page'}
             </NavLink>
